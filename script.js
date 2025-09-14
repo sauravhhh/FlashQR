@@ -211,40 +211,48 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
         
-        // Create a canvas to add padding around the QR code
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
+        // Create a new image to ensure it's fully loaded
+        const newImg = new Image();
+        newImg.crossOrigin = 'Anonymous'; // Handle potential CORS issues
         
-        // Set canvas size (QR image size + padding)
-        const padding = 40; // 40px padding on all sides
-        canvas.width = img.naturalWidth + (padding * 2);
-        canvas.height = img.naturalHeight + (padding * 2);
-        
-        // Fill canvas with white background
-        ctx.fillStyle = '#FFFFFF';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        
-        // Draw the QR code image centered on the canvas
-        ctx.drawImage(img, padding, padding, img.naturalWidth, img.naturalHeight);
-        
-        // Generate file name
-        let fileName = 'flashqr';
-        if (downloadCount > 0) {
-            fileName += downloadCount;
-        }
-        downloadCount++;
-        
-        // Convert canvas to blob and download
-        canvas.toBlob(function(blob) {
-            const url = URL.createObjectURL(blob);
+        newImg.onload = function() {
+            // Create a canvas to add padding around the QR code
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Set canvas size (QR image size + padding)
+            const padding = 40; // 40px padding on all sides
+            canvas.width = newImg.naturalWidth + (padding * 2);
+            canvas.height = newImg.naturalHeight + (padding * 2);
+            
+            // Fill canvas with white background
+            ctx.fillStyle = '#FFFFFF';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw the QR code image centered on the canvas
+            ctx.drawImage(newImg, padding, padding, newImg.naturalWidth, newImg.naturalHeight);
+            
+            // Generate file name
+            let fileName = 'flashqr';
+            if (downloadCount > 0) {
+                fileName += downloadCount;
+            }
+            downloadCount++;
+            
+            // Create download link
             const link = document.createElement('a');
-            link.href = url;
             link.download = `${fileName}.png`;
-            document.body.appendChild(link);
+            link.href = canvas.toDataURL('image/png');
             link.click();
-            document.body.removeChild(link);
-            URL.revokeObjectURL(url);
+            
             showNotification('QR code downloaded');
-        });
+        };
+        
+        newImg.onerror = function() {
+            showNotification('Error loading image for download');
+        };
+        
+        // Set the source of the new image
+        newImg.src = img.src;
     });
 });
