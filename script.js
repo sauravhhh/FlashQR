@@ -182,8 +182,8 @@ document.addEventListener('DOMContentLoaded', function() {
         generateBtn.innerHTML = '<span class="loading"></span>Generating...';
         generateBtn.disabled = true;
         
-        // Generate new QR code using API
-        const apiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=256x256&data=${encodeURIComponent(qrData)}`;
+        // Generate new QR code using QuickChart API
+        const apiUrl = `https://quickchart.io/qr?text=${encodeURIComponent(qrData)}&size=256&margin=2`;
         
         const img = new Image();
         img.onload = function() {
