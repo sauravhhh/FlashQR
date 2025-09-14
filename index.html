@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FlashQR</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><span class="flash-icon">⚡</span>FlashQR</h1>
+            <p class="subtitle">Create QR codes for URLs, contacts, UPI and more</p>
+        </header>
+
+        <div class="card">
+            <div class="form-group">
+                <label for="qr-type">QR Code Type</label>
+                <select id="qr-type">
+                    <option value="url">Website URL</option>
+                    <option value="text">Plain Text</option>
+                    <option value="contact">Contact</option>
+                    <option value="email">Email</option>
+                    <option value="quickcall">Quick Call</option>
+                    <option value="sms">SMS</option>
+                    <option value="wifi">WiFi Network</option>
+                    <option value="upi">UPI Payment</option>
+                </select>
+            </div>
+
+            <!-- URL Fields -->
+            <div id="url-fields" class="dynamic-fields active">
+                <div class="form-group">
+                    <label for="url">Website URL</label>
+                    <input type="url" id="url" placeholder="https://example.com">
+                </div>
+            </div>
+
+            <!-- Text Fields -->
+            <div id="text-fields" class="dynamic-fields">
+                <div class="form-group">
+                    <label for="text">Text</label>
+                    <textarea id="text" rows="3" placeholder="Enter your text here"></textarea>
+                </div>
+            </div>
+
+            <!-- Contact Fields -->
+            <div id="contact-fields" class="dynamic-fields">
+                <div class="form-group">
+                    <label for="contact-name">Full Name</label>
+                    <input type="text" id="contact-name" placeholder="John Doe">
+                </div>
+                <div class="form-group">
+                    <label for="contact-phone">Contact Number</label>
+                    <input type="tel" id="contact-phone" placeholder="+91" value="+91">
+                </div>
+                <div class="form-group">
+                    <label for="contact-email">Email</label>
+                    <input type="email" id="contact-email" placeholder="john@example.com">
+                </div>
+                
+                <div class="address-grid">
+                    <div class="form-group">
+                        <label for="contact-house">House No (Optional)</label>
+                        <input type="text" id="contact-house" placeholder="123">
+                    </div>
+                    <div class="form-group">
+                        <label for="contact-village">Village/Town</label>
+                        <input type="text" id="contact-village" placeholder="Mumbai">
+                    </div>
+                    <div class="form-group">
+                        <label for="contact-district">District</label>
+                        <input type="text" id="contact-district" placeholder="Mumbai">
+                    </div>
+                    <div class="form-group">
+                        <label for="contact-state">State</label>
+                        <input type="text" id="contact-state" placeholder="Maharashtra">
+                    </div>
+                    <div class="form-group">
+                        <label for="contact-pin">PIN Code</label>
+                        <input type="text" id="contact-pin" placeholder="400001">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Email Fields -->
+            <div id="email-fields" class="dynamic-fields">
+                <div class="form-group">
+                    <label for="email-address">Email Address</label>
+                    <input type="email" id="email-address" placeholder="recipient@example.com">
+                </div>
+                <div class="form-group">
+                    <label for="email-subject">Subject</label>
+                    <input type="text" id="email-subject" placeholder="Email subject">
+                </div>
+                <div class="form-group">
+                    <label for="email-body">Message</label>
+                    <textarea id="email-body" rows="3" placeholder="Your message here"></textarea>
+                </div>
+            </div>
+
+            <!-- Quick Call Fields -->
+            <div id="quickcall-fields" class="dynamic-fields">
+                <div class="form-group">
+                    <label for="quickcall-number">Phone Number</label>
+                    <input type="tel" id="quickcall-number" placeholder="9876543210" value="+91">
+                </div>
+            </div>
+
+            <!-- SMS Fields -->
+            <div id="sms-fields" class="dynamic-fields">
+                <div class="form-group">
+                    <label for="sms-number">Phone Number</label>
+                    <input type="tel" id="sms-number" placeholder="+91" value="+91">
+                </div>
+                <div class="form-group">
+                    <label for="sms-message">Message</label>
+                    <textarea id="sms-message" rows="2" placeholder="Your SMS message"></textarea>
+                </div>
+            </div>
+
+            <!-- WiFi Fields -->
+            <div id="wifi-fields" class="dynamic-fields">
+                <div class="form-group">
+                    <label for="wifi-ssid">Network Name (SSID)</label>
+                    <input type="text" id="wifi-ssid" placeholder="MyWiFiNetwork">
+                </div>
+                <div class="form-group">
+                    <label for="wifi-password">Password</label>
+                    <input type="password" id="wifi-password" placeholder="password">
+                </div>
+                <div class="form-group">
+                    <label for="wifi-type">Security Type</label>
+                    <select id="wifi-type">
+                        <option value="WPA">WPA/WPA2</option>
+                        <option value="WEP">WEP</option>
+                        <option value="nopass">No Password</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- UPI Fields -->
+            <div id="upi-fields" class="dynamic-fields">
+                <div class="form-group">
+                    <label for="upi-id">UPI ID</label>
+                    <input type="text" id="upi-id" placeholder="yourname@upi">
+                </div>
+                <div class="form-group">
+                    <label for="upi-name">Name</label>
+                    <input type="text" id="upi-name" placeholder="John Doe">
+                </div>
+                <div class="form-group">
+                    <label for="upi-amount">Amount (Optional)</label>
+                    <input type="number" id="upi-amount" placeholder="100.00" step="0.01">
+                </div>
+                <div class="form-group">
+                    <label for="upi-note">Note (Optional)</label>
+                    <input type="text" id="upi-note" placeholder="Payment for services">
+                </div>
+            </div>
+
+            <button id="generate-btn" class="btn">Generate QR Code</button>
+        </div>
+
+        <div id="qr-container" class="qr-container card">
+            <div id="qrcode"></div>
+            <button id="download-btn" class="btn btn-secondary">Download QR Code</button>
+        </div>
+    </div>
+
+    <footer>
+        Made with <span class="heart">❤️</span> by Sauravhhh
+    </footer>
+
+    <div id="notification" class="notification"></div>
+
+    <script src="script.js"></script>
+</body>
+                      </html>
