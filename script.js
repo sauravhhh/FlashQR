@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const qrType = document.getElementById('qr-type');
     const generateBtn = document.getElementById('generate-btn');
     const downloadBtn = document.getElementById('download-btn');
+    const filenameInput = document.getElementById('filename');
     const qrContainer = document.getElementById('qr-container');
     const qrcode = document.getElementById('qrcode');
     const notification = document.getElementById('notification');
@@ -182,8 +183,8 @@ document.addEventListener('DOMContentLoaded', function() {
         generateBtn.innerHTML = '<span class="loading"></span>Generating...';
         generateBtn.disabled = true;
         
-        // Generate new QR code using QuickChart API
-        const apiUrl = `https://quickchart.io/qr?text=${encodeURIComponent(qrData)}&size=256&margin=2`;
+        // Generate new QR code using the specified API
+        const apiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=256x256&data=${encodeURIComponent(qrData)}`;
         
         const img = new Image();
         img.onload = function() {
@@ -211,48 +212,39 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
         
-        // Create a new image to ensure it's fully loaded
-        const newImg = new Image();
-        newImg.crossOrigin = 'Anonymous'; // Handle potential CORS issues
-        
-        newImg.onload = function() {
-            // Create a canvas to add padding around the QR code
-            const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d');
-            
-            // Set canvas size (QR image size + padding)
-            const padding = 40; // 40px padding on all sides
-            canvas.width = newImg.naturalWidth + (padding * 2);
-            canvas.height = newImg.naturalHeight + (padding * 2);
-            
-            // Fill canvas with white background
-            ctx.fillStyle = '#FFFFFF';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            
-            // Draw the QR code image centered on the canvas
-            ctx.drawImage(newImg, padding, padding, newImg.naturalWidth, newImg.naturalHeight);
-            
-            // Generate file name
-            let fileName = 'flashqr';
+        // Get custom filename or use default
+        let fileName = filenameInput.value.trim();
+        if (!fileName) {
+            // Use default naming
+            fileName = 'flashqr';
             if (downloadCount > 0) {
                 fileName += downloadCount;
             }
             downloadCount++;
-            
-            // Create download link
-            const link = document.createElement('a');
-            link.download = `${fileName}.png`;
-            link.href = canvas.toDataURL('image/png');
-            link.click();
-            
-            showNotification('QR code downloaded');
-        };
+        }
         
-        newImg.onerror = function() {
-            showNotification('Error loading image for download');
-        };
+        // Ensure filename has .png extension
+        if (!fileName.toLowerCase().endsWith('.png')) {
+            fileName += '.png';
+        }
         
-        // Set the source of the new image
-        newImg.src = img.src;
+        // Use fetch to get the image as a blob
+        fetch(img.src)
+            .then(response => response.blob())
+            .then(blob => {
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = fileName;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url);
+                showNotification('QR code downloaded');
+            })
+            .catch(error => {
+                console.error('Download error:', error);
+                showNotification('Error downloading QR code');
+            });
     });
 });
